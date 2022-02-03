@@ -1,11 +1,11 @@
 import Controller from "utils/interfaces/controller.interface";
 import {NextFunction, Response, Router} from "express";
 import UserService from "./user.service";
-import validationMiddleware from "../../../middleware/validation.middleware";
-import { validate } from "class-validator";
-import HttpException from "../../../utils/exceptions/http.exception";
+import validationMiddleware from "../../middleware/validation.middleware";
+import HttpException from "../../utils/exceptions/http.exception";
+import authenticatedMiddleware from "../../middleware/authenticated.middleware";
+import validate from "../user/user.validation";
 
-// TODO solve problems with controller
 
 class UserController implements Controller {
     public path = '/user';
@@ -28,7 +28,7 @@ class UserController implements Controller {
             this.login
         );
 
-        this.router.get(`${this.path}`, authenticated, this.getUser);
+        this.router.get(`${this.path}`, authenticatedMiddleware, this.getUser);
     }
 
     private register = async (
